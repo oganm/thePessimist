@@ -1,7 +1,3 @@
-#mining google news for future training
-#refreshes google RSS every 30 minutes to
-#download the articles
-
 library(stringr)
 require(XML)
 require(RCurl)
@@ -21,6 +17,7 @@ while (T){
   
 for (i in src){
   title = regmatches(as.character(i[1][1]), gregexpr('(?<=value =).*?"(?=[)])', as.character(i[1][1]),perl=T))
+  outlet = regmatches(title[[1]], gregexpr('(?<=[ ][-][ ]).*?(?=["])',title[[1]],perl=T))[[1]]
   title = regmatches(title[[1]], gregexpr('^.*?(?=[ ][-][ ])',title[[1]],perl=T))[[1]]
   title = substr(title,3,nchar(title))
   title = str_replace_all(title, "[^[:alnum:]]", " ")
@@ -31,7 +28,9 @@ for (i in src){
     site <- getURL(link, .opts = curlOptions(
       cookiejar="",  useragent = "Mozilla/5.0", followlocation = TRUE
     ))
-    site = paste0('<!--',link,'-->\n',site)
+    site = paste0('<!--',link,'-->\n',
+                  '<!--',outlet,'-->\n',
+                  site)
      #site = c(paste0('<!--',link,'-->'),site)
     
   }, error = function(e) {
