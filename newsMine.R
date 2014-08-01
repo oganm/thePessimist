@@ -13,7 +13,7 @@ src<-xpathApply(xmlRoot(xmlfile), "//item")
 while (T){
   xData <- getURL(fileURL, cainfo = 'cacert.pem.txt')
   xmlfile = xmlTreeParse(xData)
-  src<-xpathApply(xmlRoot(xmlfile), "//item")\
+  src<-xpathApply(xmlRoot(xmlfile), "//item")
   
 for (i in src){
   title = regmatches(as.character(i[1][1]), gregexpr('(?<=value =).*?"(?=[)])', as.character(i[1][1]),perl=T))
